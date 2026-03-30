@@ -12,7 +12,7 @@ interface Props {
 export function EventCard({ title, image, slug, time, date, location} : Props) {
     return (
         <Link href={`/events/${slug}`} id="event-card">
-            <Image src={image} alt={title} width={410} height={300} />
+            <Image src={image} alt={title} width={410} height={300} className="w-full h-full" />
 
             <div className="flex flex-row gap-2">
                 <Image src="/icons/pin.svg" alt="location" width={14} height={14} />
