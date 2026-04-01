@@ -9,7 +9,7 @@ interface Props {
     date: string
     time: string
 }
-export function EventCard({ title, image, slug, time, date, location} : Props) {
+export function EventCard({ title, image, slug, time, date, location } : Props) {
     return (
         <Link href={`/events/${slug}`} id="event-card">
             <Image src={image} alt={title} width={410} height={300} className="w-full h-full" />

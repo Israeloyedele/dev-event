@@ -18,6 +18,8 @@ export async function POST(req: NextRequest) {
         if (!file) {
             return NextResponse.json({ message: "Image file required" }, {status: 400});
         }
+        let tags = JSON.parse(formData.get('tags') as string);
+        let agenda = JSON.parse(formData.get('agenda') as string);
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
@@ -30,8 +32,13 @@ export async function POST(req: NextRequest) {
         event.image = (uploadResult as { secure_url: string}).secure_url;
 
 
+
         console.log(event);
-        const createdEvent = await Event.create(event);
+        const createdEvent = await Event.create({
+            ...event,
+            tags,
+            agenda
+        });
         return NextResponse.json({ message: "Event Listed Successfully", event: createdEvent }, {status: 201});
 
     } catch(e){
@@ -43,36 +50,10 @@ export async function POST(req: NextRequest) {
 export async function GET() {
     try {
         await dbConnect();
-        const events = await Event.find().sort({ createdAt: 1 });
+        const events = await Event.find().sort({ createdAt: -1 });
         return NextResponse.json({ message: "Events Fetched Successfully", events }, { status: 200});
 
     } catch (e){
         return NextResponse.json({ message: "Invalid JSON format", error: e }, { status: 400});
     }
 }
-
-
-/*
-import mongoose from "mongoose";
-
-const MONGODB_URI = process.env.MONGODB_URI;
-
-async function dbConnect() {
-  if (!MONGODB_URI) {
-    throw new Error(
-      "Please define the MONGODB_URI environment variable inside .env.local"
-    );
-  }
-
-  const opts = {
-    bufferCommands: false,
-    ssl: true,
-  };
-
-  const mongooseInstance = await mongoose.connect(MONGODB_URI, opts);
-  console.log("Connected to MongoDB (New)");
-  return mongooseInstance;
-}
-
-export default dbConnect;
-* */
