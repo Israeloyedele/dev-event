@@ -7,11 +7,9 @@ import { EventTags } from "@/components/EventTags";
 import { BookEvent } from "@/components/BookEvent";
 import { getSimilarEvents } from "@/lib/actions/event.action";
 import { EventCard } from "@/components/EventCard";
-import { cacheLife } from "next/cache";
 
 export default async function EventDetails({ params } : { params:Promise< { slug: string }> }) {
-    'use cache';
-    cacheLife('hours')
+
 
     const { slug } = await params;
     const request = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/events/${slug}`);
